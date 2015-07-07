@@ -2,8 +2,9 @@ require_relative 'questions_database'
 require_relative 'question'
 require_relative 'reply'
 require_relative 'question_like'
+require_relative 'model'
 
-class User
+class User < Model
   attr_accessor :id, :fname, :lname
 
   def initialize(options = {})
@@ -65,28 +66,5 @@ class User
     SQL
 
     average_karma[0]['ave']
-  end
-
-  def save
-    if id.nil?
-      QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
-        INSERT INTO
-          users (fname, lname)
-        VALUES
-          (?, ?)
-      SQL
-
-      self.id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      options = {id: id, fname: fname, lname: lname}
-      QuestionsDatabase.instance.execute(<<-SQL, options)
-        UPDATE
-          users
-        SET
-          fname = :fname, lname = :lname
-        WHERE
-          id = :id
-      SQL
-    end
   end
 end

@@ -1,6 +1,7 @@
 require_relative 'questions_database'
+require_relative 'model'
 
-class Reply
+class Reply < Model
   attr_accessor :id, :question_id, :parent_reply_id, :body, :author_id
 
   def initialize(options = {})
@@ -73,40 +74,5 @@ class Reply
     SQL
 
     child_replies.map { |child| Reply.new(child) }
-  end
-
-  def save
-    options = {
-      id: id,
-      question_id: question_id,
-      parent_reply_id: parent_reply_id,
-      body: body,
-      author_id: author_id
-      }
-
-    if id.nil?
-      options.delete(:id) # otherwise we get 'bind error'
-      
-      QuestionsDatabase.instance.execute(<<-SQL, options)
-        INSERT INTO
-          replies (author_id, question_id, parent_reply_id, body)
-        VALUES
-          (:author_id, :question_id, :parent_reply_id, :body)
-      SQL
-
-      self.id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      QuestionsDatabase.instance.execute(<<-SQL, options)
-        UPDATE
-          replies
-        SET
-          question_id = :question_id,
-          parent_reply_id = :parent_reply_id,
-          body = :body,
-          author_id = :author_id
-        WHERE
-          id = :id
-      SQL
-    end
   end
 end

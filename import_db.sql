@@ -64,7 +64,7 @@ VALUES
   ((SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'), (SELECT id FROM questions WHERE title = 'Ruby'));
 
 INSERT INTO
-  replies (author_id,question_id, body)
+  replies (author_id  question_id, body)
 VALUES
   ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'SQL'), 'You use CREATE TABLE'),
   ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'Ruby'), 'You type class Class_name');

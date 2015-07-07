@@ -1,7 +1,8 @@
 require_relative 'questions_database'
 require_relative 'question_like'
+require_relative 'model'
 
-class Question
+class Question < Model
   attr_accessor :id, :title, :body, :user_id
 
   def initialize(options = {})
@@ -68,28 +69,5 @@ class Question
 
   def self.most_liked(n)
     QuestionLike.most_liked_questions(n)
-  end
-
-  def save
-    if id.nil?
-      QuestionsDatabase.instance.execute(<<-SQL, title, body, user_id)
-        INSERT INTO
-          questions (title, body, user_id)
-        VALUES
-          (?, ?, ?)
-      SQL
-
-      self.id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      options = {id: id, title: title, body: body, user_id: user_id}
-      QuestionsDatabase.instance.execute(<<-SQL, options)
-        UPDATE
-          questions
-        SET
-          title = :title, body = :body, user_id = :user_id
-        WHERE
-          id = :id
-      SQL
-    end
   end
 end
