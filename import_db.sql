@@ -53,12 +53,14 @@ INSERT INTO
   questions (title, body, user_id)
 VALUES
   ('SQL', 'How do you make tables?', (SELECT id FROM users WHERE fname = 'Albert' AND lname = 'Einstein')),
-  ('Ruby', 'How do you create a class?', (SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'));
+  ('Ruby', 'How do you create a class?', (SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith')),
+  ('Ruby', 'How do you create an object?', (SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'));
 
 INSERT INTO
   question_follows (user_id, question_id)
 VALUES
   ((SELECT id FROM users WHERE fname = 'Albert' AND lname = 'Einstein'), (SELECT id FROM questions WHERE title = 'SQL')),
+  ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'Ruby')),
   ((SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'), (SELECT id FROM questions WHERE title = 'Ruby'));
 
 INSERT INTO
@@ -77,4 +79,5 @@ INSERT INTO
   question_likes (user_id, question_id)
 VALUES
   ((SELECT id FROM users WHERE fname = 'Albert' AND lname = 'Einstein'), (SELECT id FROM questions WHERE title = 'SQL')),
+  ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'SQL')),
   ((SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'), (SELECT id FROM questions WHERE title = 'Ruby'));
