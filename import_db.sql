@@ -13,7 +13,7 @@ CREATE TABLE questions (
   id INTEGER PRIMARY KEY NOT NULL,
   title VARCHAR(255),
   body TEXT,
-  user_id INTEGER REFERENCES users
+  author_id INTEGER REFERENCES users
 );
 
 DROP TABLE IF EXISTS question_follows;
@@ -50,7 +50,7 @@ VALUES
   ('Adam', 'Smith');
 
 INSERT INTO
-  questions (title, body, user_id)
+  questions (title, body, author_id)
 VALUES
   ('SQL', 'How do you make tables?', (SELECT id FROM users WHERE fname = 'Albert' AND lname = 'Einstein')),
   ('Ruby', 'How do you create a class?', (SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith')),
@@ -64,7 +64,7 @@ VALUES
   ((SELECT id FROM users WHERE fname = 'Adam' AND lname = 'Smith'), (SELECT id FROM questions WHERE title = 'Ruby'));
 
 INSERT INTO
-  replies (author_id  question_id, body)
+  replies (author_id, question_id, body)
 VALUES
   ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'SQL'), 'You use CREATE TABLE'),
   ((SELECT id FROM users WHERE fname = 'Kurt' AND lname = 'Godel'), (SELECT id FROM questions WHERE title = 'Ruby'), 'You type class Class_name');

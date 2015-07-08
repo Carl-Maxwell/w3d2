@@ -1,26 +1,14 @@
 require_relative 'questions_database'
 require_relative 'user'
 require_relative 'question'
+require_relative 'model'
 
-class QuestionFollow
+class QuestionFollow < Model
   attr_accessor :id, :user_id, :question_id
 
   def initialize(options = {})
     @id = options['id']
     @user_id, @question_id = options['user_id'], options['question_id']
-  end
-
-  def self.find_by_id(id)
-    question_follow_id = QuestionsDatabase.instance.execute(<<-SQL, id: id)
-      SELECT
-        *
-      FROM
-        question_follows
-      WHERE
-        id = :id
-    SQL
-
-    QuestionFollow.new(question_follow_id.first)
   end
 
   def self.followers_for_question_id(question_id)
@@ -47,7 +35,7 @@ class QuestionFollow
       JOIN
         question_follows ON questions.id = question_follows.question_id
       WHERE
-        questions.user_id = ?
+        questions.author_id = ?
     SQL
 
     followed_questions.map { |question| Question.new(question) }
